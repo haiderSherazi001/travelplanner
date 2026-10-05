@@ -21,4 +21,8 @@ class Trip extends Model
     {
         return $this->belongsToMany(User::class)->withPivot('role')->withTimestamps();
     }
+    public function activities()
+    {
+        return $this->hasMany(Activity::class);
+    }
 }
