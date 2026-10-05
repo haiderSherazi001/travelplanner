@@ -67,8 +67,11 @@
                     
                     <div class="space-y-4">
                         @foreach ($activities as $activity)
-                            <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 @if($activity->type == 'flight') border-blue-500 @elseif($activity->type == 'hotel') border-purple-500 @elseif($activity->type == 'dining') border-orange-500 @else border-green-500 @endif flex justify-between items-center">
-                                <div>
+                            @php 
+                                $userVote = $activity->votes->where('user_id', auth()->id())->first()->value ?? 0; 
+                            @endphp
+                            <div wire:key="activity-{{ $activity->id }}" class="bg-white p-4 rounded-lg shadow-sm border-l-4 @if($activity->type == 'flight') border-blue-500 @elseif($activity->type == 'hotel') border-purple-500 @elseif($activity->type == 'dining') border-orange-500 @else border-green-500 @endif flex justify-between items-center">
+                                <div class="flex-1">
                                     <h5 class="font-bold text-gray-900">{{ $activity->title }}</h5>
                                     <div class="text-sm text-gray-500 flex items-center gap-4 mt-1">
                                         <span>⏰ {{ \Carbon\Carbon::parse($activity->scheduled_at)->format('g:i A') }}</span>
@@ -80,8 +83,39 @@
                                         <p class="text-sm text-gray-600 mt-2 bg-gray-50 p-2 rounded">{{ $activity->notes }}</p>
                                     @endif
                                 </div>
-                                <div class="px-3 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-600 uppercase tracking-wide">
-                                    {{ $activity->type }}
+                                
+                                <!-- Voting Section -->
+                                @php 
+                                    $userVote = $activity->votes->where('user_id', auth()->id())->first()->value ?? 0; 
+                                @endphp
+                                <div class="flex items-center gap-4 ml-4 pl-4 border-l border-gray-100">
+                                    <div class="px-3 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-600 uppercase tracking-wide hidden sm:block">
+                                        {{ $activity->type }}
+                                    </div>
+                                    
+                                    <div class="flex flex-col items-center bg-white rounded-xl shadow-sm p-1 border border-gray-200">
+                                        <!-- Upvote Button -->
+                                        <button wire:click="castVote({{ $activity->id }}, 1)" 
+                                                wire:loading.attr="disabled"
+                                                class="p-1.5 rounded-lg transition-colors focus:outline-none disabled:opacity-50
+                                                    {{ $userVote === 1 ? 'text-indigo-600 bg-indigo-50' : 'text-gray-400 hover:bg-gray-50 hover:text-indigo-600' }}">
+                                            <svg class="w-5 h-5" fill="{{ $userVote === 1 ? 'currentColor' : 'none' }}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
+                                        </button>
+
+                                        <!-- Score -->
+                                        <span class="font-bold text-sm py-0.5 min-w-[1.5rem] text-center transition-colors 
+                                                    {{ $userVote === 1 ? 'text-indigo-600' : ($userVote === -1 ? 'text-red-500' : 'text-gray-700') }}">
+                                            {{ $activity->score }}
+                                        </span>
+
+                                        <!-- Downvote Button -->
+                                        <button wire:click="castVote({{ $activity->id }}, -1)" 
+                                                wire:loading.attr="disabled"
+                                                class="p-1.5 rounded-lg transition-colors focus:outline-none disabled:opacity-50
+                                                    {{ $userVote === -1 ? 'text-red-500 bg-red-50' : 'text-gray-400 hover:bg-gray-50 hover:text-red-500' }}">
+                                            <svg class="w-5 h-5" fill="{{ $userVote === -1 ? 'currentColor' : 'none' }}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         @endforeach

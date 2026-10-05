@@ -5,6 +5,7 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\Trip;
 use App\Models\Activity;
+use \App\Models\Vote;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
@@ -51,10 +52,28 @@ class TripItinerary extends Component
         session()->flash('message', 'Activity added to itinerary!');
     }
 
+    public function castVote($activityId, $value)
+    {
+        $existingVote = Vote::where('user_id', Auth::id())
+                                        ->where('activity_id', $activityId)
+                                        ->first();
+
+        // If the user clicks the same vote button again, remove their vote
+        if ($existingVote && $existingVote->value == $value) {
+            $existingVote->delete();
+        } else {
+            // Otherwise, create or update their vote
+            Vote::updateOrCreate(
+                ['user_id' => Auth::id(), 'activity_id' => $activityId],
+                ['value' => $value]
+            );
+        }
+    }
+
     public function render()
     {
-        // Fetch and group activities by date for the Day-by-Day schedule view
         $groupedActivities = $this->trip->activities()
+            ->with('votes') 
             ->orderBy('scheduled_at')
             ->get()
             ->groupBy(function($activity) {
@@ -63,6 +82,6 @@ class TripItinerary extends Component
 
         return view('livewire.trip-itinerary', [
             'groupedActivities' => $groupedActivities
-        ])->layout('layouts.app'); // Wrap it in the standard authenticated layout
+        ])->layout('layouts.app');
     }
 }

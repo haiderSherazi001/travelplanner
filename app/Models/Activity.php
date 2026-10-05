@@ -26,4 +26,14 @@ class Activity extends Model
     {
         return $this->belongsTo(Trip::class);
     }
+
+    public function votes()
+    {
+        return $this->hasMany(Vote::class);
+    }
+
+    public function getScoreAttribute()
+    {
+       return $this->votes->sum('value');
+    }
 }
