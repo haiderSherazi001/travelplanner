@@ -1,11 +1,16 @@
 <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
     <!-- Trip Header -->
-    <div class="mb-8">
-        <h1 class="text-3xl font-extrabold text-gray-900">{{ $trip->title }}</h1>
-        <p class="text-gray-600 mt-2 text-lg">
-            📍 {{ $trip->destination }} | 
-            📅 {{ \Carbon\Carbon::parse($trip->start_date)->format('M d, Y') }} - {{ \Carbon\Carbon::parse($trip->end_date)->format('M d, Y') }}
-        </p>
+    <div class="mb-8 flex justify-between items-start">
+        <div>
+            <h1 class="text-3xl font-extrabold text-gray-900">{{ $trip->title }}</h1>
+            <p class="text-gray-600 mt-2 text-lg">
+                📍 {{ $trip->destination }} | 
+                📅 {{ \Carbon\Carbon::parse($trip->start_date)->format('M d, Y') }} - {{ \Carbon\Carbon::parse($trip->end_date)->format('M d, Y') }}
+            </p>
+        </div>
+        <a href="{{ route('trips.expenses', $trip->id) }}" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg shadow-sm hover:bg-gray-50 transition font-medium flex items-center gap-2">
+            <span>💰</span> Manage Finances
+        </a>
     </div>
 
     @if (session()->has('message'))

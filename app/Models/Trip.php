@@ -25,4 +25,8 @@ class Trip extends Model
     {
         return $this->hasMany(Activity::class);
     }
+    public function expenses()
+    {
+        return $this->hasMany(Expense::class);
+    }
 }
