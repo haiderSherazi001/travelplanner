@@ -9,6 +9,9 @@
             </p>
         </div>
         <div class="flex gap-3">
+            <a href="{{ route('trips.chat', $trip->id) }}" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg shadow-sm hover:bg-gray-50 transition font-medium flex items-center gap-2">
+                <span>💬</span> Chat
+            </a>
             <a href="{{ route('trips.packing-list', $trip->id) }}" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg shadow-sm hover:bg-gray-50 transition font-medium flex items-center gap-2">
                 <span>🎒</span> Packing List
             </a>
