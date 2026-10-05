@@ -7,6 +7,7 @@ use \App\Livewire\TripPackingList;
 use \App\Livewire\TripChat;
 use \App\Models\Trip;
 use \Illuminate\Support\Facades\Auth;
+use \App\Http\Controllers\ItineraryExportController;
 
 Route::view('/', 'welcome');
 
@@ -48,5 +49,9 @@ Route::get('/trips/join/{code}', function ($code) {
     return redirect()->route('trips.show', $trip->id)
                      ->with('message', "Welcome to {$trip->title}!");
 })->middleware(['auth'])->name('trips.join');
+
+Route::get('/trips/{trip}/export', [ItineraryExportController::class, 'download'])
+    ->middleware(['auth'])
+    ->name('trips.export');
 
 require __DIR__.'/auth.php';

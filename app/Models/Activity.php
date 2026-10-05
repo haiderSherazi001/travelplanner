@@ -32,8 +32,13 @@ class Activity extends Model
         return $this->hasMany(Vote::class);
     }
 
-    public function getScoreAttribute()
+    public function getUpvotesAttribute()
     {
-       return $this->votes->sum('value');
+        return $this->votes->where('value', 1)->count();
+    }
+
+    public function getDownvotesAttribute()
+    {
+        return $this->votes->where('value', -1)->count();
     }
 }

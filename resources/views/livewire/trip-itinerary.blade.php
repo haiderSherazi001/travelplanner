@@ -38,6 +38,9 @@
             <a href="{{ route('trips.expenses', $trip->id) }}" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg shadow-sm hover:bg-gray-50 transition font-medium flex items-center gap-2">
                 <span>💰</span> Finances
             </a>
+            <a href="{{ route('trips.export', $trip->id) }}" class="bg-indigo-600 text-white border border-transparent px-4 py-2 rounded-lg shadow-sm hover:bg-indigo-700 transition font-medium flex items-center gap-2">
+                <span>📄</span> Export PDF
+            </a>
         </div>
     </div>
 
@@ -121,32 +124,40 @@
                                 @php 
                                     $userVote = $activity->votes->where('user_id', auth()->id())->first()->value ?? 0; 
                                 @endphp
-                                <div class="flex items-center gap-4 ml-4 pl-4 border-l border-gray-100">
+                                <div class="flex items-center gap-3 ml-4 pl-4 border-l border-gray-100">
                                     <div class="px-3 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-600 uppercase tracking-wide hidden sm:block">
                                         {{ $activity->type }}
                                     </div>
                                     
-                                    <div class="flex flex-col items-center bg-white rounded-xl shadow-sm p-1 border border-gray-200">
-                                        <!-- Upvote Button -->
+                                    <div class="flex items-center gap-2">
+                                        <!-- Upvote Button & Count -->
                                         <button wire:click="castVote({{ $activity->id }}, 1)" 
                                                 wire:loading.attr="disabled"
-                                                class="p-1.5 rounded-lg transition-colors focus:outline-none disabled:opacity-50
-                                                    {{ $userVote === 1 ? 'text-indigo-600 bg-indigo-50' : 'text-gray-400 hover:bg-gray-50 hover:text-indigo-600' }}">
-                                            <svg class="w-5 h-5" fill="{{ $userVote === 1 ? 'currentColor' : 'none' }}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
+                                                title="Vote Yes"
+                                                class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors focus:outline-none disabled:opacity-50 border
+                                                    {{ $userVote === 1 ? 'bg-green-50 border-green-200 text-green-700' : 'bg-white border-gray-200 text-gray-500 hover:bg-gray-50' }}">
+                                            
+                                            <!-- Up Arrow Icon -->
+                                            <svg class="w-4 h-4" fill="{{ $userVote === 1 ? 'currentColor' : 'none' }}" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+                                            </svg>
+                                            
+                                            <span class="font-bold text-sm">{{ $activity->upvotes }}</span>
                                         </button>
 
-                                        <!-- Score -->
-                                        <span class="font-bold text-sm py-0.5 min-w-[1.5rem] text-center transition-colors 
-                                                    {{ $userVote === 1 ? 'text-indigo-600' : ($userVote === -1 ? 'text-red-500' : 'text-gray-700') }}">
-                                            {{ $activity->score }}
-                                        </span>
-
-                                        <!-- Downvote Button -->
+                                        <!-- Downvote Button & Count -->
                                         <button wire:click="castVote({{ $activity->id }}, -1)" 
                                                 wire:loading.attr="disabled"
-                                                class="p-1.5 rounded-lg transition-colors focus:outline-none disabled:opacity-50
-                                                    {{ $userVote === -1 ? 'text-red-500 bg-red-50' : 'text-gray-400 hover:bg-gray-50 hover:text-red-500' }}">
-                                            <svg class="w-5 h-5" fill="{{ $userVote === -1 ? 'currentColor' : 'none' }}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                                title="Vote No"
+                                                class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors focus:outline-none disabled:opacity-50 border
+                                                    {{ $userVote === -1 ? 'bg-red-50 border-red-200 text-red-600' : 'bg-white border-gray-200 text-gray-500 hover:bg-gray-50' }}">
+                                            
+                                            <!-- Down Arrow Icon -->
+                                            <svg class="w-4 h-4" fill="{{ $userVote === -1 ? 'currentColor' : 'none' }}" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                            </svg>
+                                            
+                                            <span class="font-bold text-sm">{{ $activity->downvotes }}</span>
                                         </button>
                                     </div>
                                 </div>
