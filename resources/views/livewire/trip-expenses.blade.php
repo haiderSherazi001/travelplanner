@@ -51,8 +51,8 @@
                     <p class="text-4xl font-extrabold mt-1">${{ number_format($totalCost, 2) }}</p>
                 </div>
                 <div class="bg-gray-800 p-3 rounded-lg text-sm text-gray-300 text-right">
-                    <span>Your share logic</span><br>
-                    <span class="text-xs text-gray-500">(To be calculated later)</span>
+                    <span class="block text-gray-400 text-xs uppercase tracking-wider mb-1">Per Person ({{ $memberCount }} Members)</span>
+                    <span class="text-xl font-bold text-white">${{ number_format($perPersonShare, 2) }}</span>
                 </div>
             </div>
 

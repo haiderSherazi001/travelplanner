@@ -43,15 +43,21 @@ class TripExpenses extends Component
 
     public function render()
     {
-        // Fetch expenses and eager load the user who paid
         $expenses = $this->trip->expenses()->with('payer')->orderByDesc('date')->get();
-        
-        // Calculate the total trip cost
         $totalCost = $expenses->sum('amount');
+        
+        // Count how many people are on the trip (minimum 1 to avoid division by zero)
+        $memberCount = $this->trip->users()->count();
+        $memberCount = $memberCount > 0 ? $memberCount : 1;
+        
+        // Calculate even split
+        $perPersonShare = $totalCost / $memberCount;
 
         return view('livewire.trip-expenses', [
             'expenses' => $expenses,
-            'totalCost' => $totalCost
+            'totalCost' => $totalCost,
+            'perPersonShare' => $perPersonShare,
+            'memberCount' => $memberCount
         ])->layout('layouts.app');
     }
 }
