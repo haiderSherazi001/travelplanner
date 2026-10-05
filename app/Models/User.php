@@ -46,4 +46,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function trips()
+    {
+        return $this->belongsToMany(Trip::class)->withPivot('role')->withTimestamps();
+    }
 }
