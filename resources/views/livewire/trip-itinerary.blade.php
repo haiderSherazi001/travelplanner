@@ -1,8 +1,28 @@
 <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
     <!-- Trip Header -->
     <div class="mb-8 flex justify-between items-start">
-        <div>
-            <h1 class="text-3xl font-extrabold text-gray-900">{{ $trip->title }}</h1>
+       <div>
+            <div class="flex items-center gap-4">
+                <h1 class="text-3xl font-extrabold text-gray-900">{{ $trip->title }}</h1>
+                
+                <!-- Share Button (Copies Link to Clipboard) -->
+                <div x-data="{ copied: false }" class="relative">
+                    <button @click="
+                                navigator.clipboard.writeText('{{ route('trips.join', $trip->invite_code) }}');
+                                copied = true;
+                                setTimeout(() => copied = false, 2000);
+                            " 
+                            class="flex items-center gap-1 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 px-3 py-1.5 rounded-md text-sm font-bold transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
+                        Share Invite Link
+                    </button>
+                    <!-- Tooltip -->
+                    <div x-show="copied" x-transition class="absolute top-full mt-2 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded shadow-lg whitespace-nowrap">
+                        Copied to clipboard!
+                    </div>
+                </div>
+            </div>
+
             <p class="text-gray-600 mt-2 text-lg">
                 📍 {{ $trip->destination }} | 
                 📅 {{ \Carbon\Carbon::parse($trip->start_date)->format('M d, Y') }} - {{ \Carbon\Carbon::parse($trip->end_date)->format('M d, Y') }}

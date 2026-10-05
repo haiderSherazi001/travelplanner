@@ -1,10 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use  \App\Livewire\TripItinerary;
+use \App\Livewire\TripItinerary;
 use \App\Livewire\TripExpenses;
 use \App\Livewire\TripPackingList;
 use \App\Livewire\TripChat;
+use \App\Models\Trip;
+use \Illuminate\Support\Facades\Auth;
 
 Route::view('/', 'welcome');
 
@@ -31,5 +33,20 @@ Route::get('/trips/{trip}/packing-list', TripPackingList::class)
 Route::get('/trips/{trip}/chat', TripChat::class)
     ->middleware(['auth'])
     ->name('trips.chat');
+
+Route::get('/trips/join/{code}', function ($code) {
+    $trip = Trip::where('invite_code', $code)->firstOrFail();
+    
+    $user = Auth::user();
+
+    // Check if the user is already on this trip
+    if (!$user->trips->contains($trip->id)) {
+        // Attach them as a member
+        $user->trips()->attach($trip->id, ['role' => 'member']);
+    }
+
+    return redirect()->route('trips.show', $trip->id)
+                     ->with('message', "Welcome to {$trip->title}!");
+})->middleware(['auth'])->name('trips.join');
 
 require __DIR__.'/auth.php';
