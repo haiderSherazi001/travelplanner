@@ -8,9 +8,14 @@
                 📅 {{ \Carbon\Carbon::parse($trip->start_date)->format('M d, Y') }} - {{ \Carbon\Carbon::parse($trip->end_date)->format('M d, Y') }}
             </p>
         </div>
-        <a href="{{ route('trips.expenses', $trip->id) }}" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg shadow-sm hover:bg-gray-50 transition font-medium flex items-center gap-2">
-            <span>💰</span> Manage Finances
-        </a>
+        <div class="flex gap-3">
+            <a href="{{ route('trips.packing-list', $trip->id) }}" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg shadow-sm hover:bg-gray-50 transition font-medium flex items-center gap-2">
+                <span>🎒</span> Packing List
+            </a>
+            <a href="{{ route('trips.expenses', $trip->id) }}" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg shadow-sm hover:bg-gray-50 transition font-medium flex items-center gap-2">
+                <span>💰</span> Finances
+            </a>
+        </div>
     </div>
 
     @if (session()->has('message'))

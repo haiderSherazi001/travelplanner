@@ -29,4 +29,8 @@ class Trip extends Model
     {
         return $this->hasMany(Expense::class);
     }
+    public function packingListItems()
+    {
+        return $this->hasMany(PackingListItem::class);
+    }
 }

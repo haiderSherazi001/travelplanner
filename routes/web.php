@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use  \App\Livewire\TripItinerary;
 use \App\Livewire\TripExpenses;
+use \App\Livewire\TripPackingList;
 
 Route::view('/', 'welcome');
 
@@ -21,5 +22,9 @@ Route::get('/trips/{trip}', TripItinerary::class)
 Route::get('/trips/{trip}/expenses', TripExpenses::class)
     ->middleware(['auth'])
     ->name('trips.expenses');
+
+Route::get('/trips/{trip}/packing-list', TripPackingList::class)
+    ->middleware(['auth'])
+    ->name('trips.packing-list');
 
 require __DIR__.'/auth.php';
