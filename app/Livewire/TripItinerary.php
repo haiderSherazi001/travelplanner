@@ -13,8 +13,7 @@ class TripItinerary extends Component
 {
     public Trip $trip;
     
-    // Form fields
-    public $title, $type = 'general', $scheduled_at, $location, $notes;
+    public $title, $type = 'general', $scheduled_at, $location, $booking_url, $reservation_code, $notes;
 
     public function mount(Trip $trip)
     {
@@ -36,6 +35,8 @@ class TripItinerary extends Component
             'type' => 'required|string',
             'scheduled_at' => 'required|date',
             'location' => 'nullable|string|max:255',
+            'booking_url' => 'nullable|url|max:255',
+            'reservation_code' => 'nullable|string|max:50',
             'notes' => 'nullable|string',
         ]);
 
@@ -44,14 +45,15 @@ class TripItinerary extends Component
             'type' => $this->type,
             'scheduled_at' => $this->scheduled_at,
             'location' => $this->location,
+            'booking_url' => $this->booking_url,
+            'reservation_code' => $this->reservation_code,
             'notes' => $this->notes,
         ]);
 
-        $this->reset(['title', 'location', 'notes']);
+        $this->reset(['title', 'location', 'booking_url', 'reservation_code', 'notes']);
         $this->type = 'general';
         session()->flash('message', 'Activity added to itinerary!');
     }
-
     public function castVote($activityId, $value)
     {
         $existingVote = Vote::where('user_id', Auth::id())

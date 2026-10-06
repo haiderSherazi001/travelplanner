@@ -15,6 +15,8 @@ class Activity extends Model
         'type',
         'scheduled_at',
         'location',
+        'booking_url',      
+        'reservation_code', 
         'notes'
     ];
 
