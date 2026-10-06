@@ -5,6 +5,8 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\Trip;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\NewExpenseNotification;
 
 class TripExpenses extends Component
 {
@@ -30,12 +32,23 @@ class TripExpenses extends Component
             'date' => 'required|date',
         ]);
 
-        $this->trip->expenses()->create([
-            'user_id' => Auth::id(), // The currently logged-in user pays
+        $expense = $this->trip->expenses()->create([
+            'user_id' => Auth::id(), 
             'description' => $this->description,
             'amount' => $this->amount,
             'date' => $this->date,
         ]);
+        
+        // Load the trip and payer relationships so the notification has access to them
+        $expense->load(['trip', 'payer']);
+
+        // Find all users attached to the trip EXCEPT the person who just paid
+        $usersToNotify = $this->trip->users()->where('users.id', '!=', Auth::id())->get();
+        
+        // Send the notification
+        if ($usersToNotify->isNotEmpty()) {
+            Notification::send($usersToNotify, new NewExpenseNotification($expense));
+        }
 
         $this->reset(['description', 'amount']);
         session()->flash('message', 'Expense logged successfully!');

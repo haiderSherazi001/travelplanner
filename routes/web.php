@@ -15,6 +15,10 @@ Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
+Route::get('/notifications', \App\Livewire\UserNotifications::class)
+    ->middleware(['auth'])
+    ->name('notifications.index');
+
 Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
