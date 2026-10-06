@@ -56,7 +56,7 @@ class TripExpenses extends Component
 
     public function render()
     {
-        $expenses = $this->trip->expenses()->with('payer')->orderByDesc('date')->get();
+        $expenses = $this->trip->expenses()->with('payer')->orderByDesc('date')->orderByDesc('created_at')->get();
         $totalCost = $expenses->sum('amount');
         
         // Count how many people are on the trip (minimum 1 to avoid division by zero)
@@ -71,6 +71,6 @@ class TripExpenses extends Component
             'totalCost' => $totalCost,
             'perPersonShare' => $perPersonShare,
             'memberCount' => $memberCount
-        ])->layout('layouts.app');
+        ]);
     }
 }

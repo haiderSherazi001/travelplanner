@@ -67,6 +67,6 @@ class TripPackingList extends Component
             'progress' => $progress,
             'totalItems' => $totalItems,
             'packedItems' => $packedItems
-        ])->layout('layouts.app');
+        ]);
     }
 }

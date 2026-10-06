@@ -60,7 +60,6 @@ class TripItinerary extends Component
                                         ->where('activity_id', $activityId)
                                         ->first();
 
-        // If the user clicks the same vote button again, remove their vote
         if ($existingVote && $existingVote->value == $value) {
             $existingVote->delete();
         } else {
@@ -84,6 +83,6 @@ class TripItinerary extends Component
 
         return view('livewire.trip-itinerary', [
             'groupedActivities' => $groupedActivities
-        ])->layout('layouts.app');
+        ]);
     }
 }

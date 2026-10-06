@@ -41,6 +41,6 @@ class TripChat extends Component
 
         return view('livewire.trip-chat', [
             'messages' => $messages
-        ])->layout('layouts.app');
+        ]);
     }
 }

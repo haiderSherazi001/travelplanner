@@ -5,9 +5,11 @@ use \App\Livewire\TripItinerary;
 use \App\Livewire\TripExpenses;
 use \App\Livewire\TripPackingList;
 use \App\Livewire\TripChat;
+use \App\Livewire\TripManager;
 use \App\Models\Trip;
 use \Illuminate\Support\Facades\Auth;
 use \App\Http\Controllers\ItineraryExportController;
+use \App\Livewire\UserNotifications;
 
 Route::view('/', 'welcome');
 
@@ -15,7 +17,7 @@ Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
-Route::get('/notifications', \App\Livewire\UserNotifications::class)
+Route::get('/notifications', UserNotifications::class)
     ->middleware(['auth'])
     ->name('notifications.index');
 
@@ -23,30 +25,16 @@ Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
 
-Route::get('/trips/{trip}', TripItinerary::class)
+Route::get('/trips/{trip}', TripManager::class)
     ->middleware(['auth'])
     ->name('trips.show');
-
-Route::get('/trips/{trip}/expenses', TripExpenses::class)
-    ->middleware(['auth'])
-    ->name('trips.expenses');
-
-Route::get('/trips/{trip}/packing-list', TripPackingList::class)
-    ->middleware(['auth'])
-    ->name('trips.packing-list');
-
-Route::get('/trips/{trip}/chat', TripChat::class)
-    ->middleware(['auth'])
-    ->name('trips.chat');
 
 Route::get('/trips/join/{code}', function ($code) {
     $trip = Trip::where('invite_code', $code)->firstOrFail();
     
     $user = Auth::user();
 
-    // Check if the user is already on this trip
     if (!$user->trips->contains($trip->id)) {
-        // Attach them as a member
         $user->trips()->attach($trip->id, ['role' => 'member']);
     }
 
