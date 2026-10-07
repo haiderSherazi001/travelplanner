@@ -1,81 +1,71 @@
-TripPlanner ✈️
+✈️ TripPlanner
 
+<p align="center">
+  <strong>A real-time collaborative workspace for planning group trips.</strong><br>
+  Plan itineraries, track shared expenses, manage packing lists, and stay connected in one place.
+</p>
 
+<p align="center">
+  <img src="https://img.shields.io/badge/Laravel-11-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" alt="Laravel 11">
+  <img src="https://img.shields.io/badge/Livewire-3-4E56A6?style=for-the-badge&logo=livewire&logoColor=white" alt="Livewire 3">
+  <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS">
+  <img src="https://img.shields.io/badge/Alpine.js-8BC0D0?style=for-the-badge&logo=alpine.js&logoColor=111827" alt="Alpine.js">
+</p>
 
+🌍 Overview
 
+TripPlanner is a real-time collaborative travel planning application built with the Laravel TALL stack.
 
+It brings the core parts of group travel into a single workspace: organize the itinerary, keep track of expenses, coordinate packing, communicate with the group, and export a complete trip report for offline use.
 
-A real-time, collaborative trip-planning web application built with the TALL stack. TripPlanner helps groups organize itineraries, manage shared and personal expenses, coordinate packing, and communicate through a rich-media chat experience.
+The application is designed around live collaboration, so changes made by one member can be reflected across connected clients without requiring manual page refreshes.
 
-Project Status: Active development
+✨ Features
 
-📸 Dashboard Preview
+<table>
+  <tr>
+    <td width="50%">
+      <h3>🗓️ Real-Time Itineraries</h3>
+      <p>Create, edit, and organize trip activities while keeping the whole group synchronized through WebSockets.</p>
+    </td>
+    <td width="50%">
+      <h3>💰 Expense Management</h3>
+      <p>Record shared or personal expenses and maintain a unified financial summary of who paid what.</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <h3>🎒 Collaborative Packing Lists</h3>
+      <p>Build packing checklists and let members assign themselves to specific items.</p>
+    </td>
+    <td width="50%">
+      <h3>💬 Rich Media Group Chat</h3>
+      <p>Chat with text, images, PDF/document attachments, and browser-recorded voice notes.</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <h3>🎙️ Voice Notes</h3>
+      <p>Record and upload <code>.webm</code> voice messages directly from the browser using the native Web Audio API.</p>
+    </td>
+    <td width="50%">
+      <h3>📄 PDF Trip Reports</h3>
+      <p>Generate professional multi-page reports covering the itinerary, finances, and packing list.</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <h3>👤 User Profiles</h3>
+      <p>Manage custom avatars and travel preferences with dynamic UI updates.</p>
+    </td>
+    <td width="50%">
+      <h3>⚡ Live UI Updates</h3>
+      <p>Use Livewire, Alpine.js, and real-time broadcasting to create a responsive collaborative experience.</p>
+    </td>
+  </tr>
+</table>
 
-
-
-Replace the image path above with your actual screenshot path, or remove this section until you have a screenshot ready.
-
-🚀 Core Features
-
-Real-Time Itineraries
-
-Create and manage trip activities.
-
-Add, edit, and reorganize itinerary items.
-
-Keep group members synchronized through real-time updates without requiring manual page refreshes.
-
-Advanced Expense Management
-
-Record group expenses and split them evenly.
-
-Track personal expenses separately.
-
-Automatically calculate who paid what and provide a consolidated financial summary.
-
-Collaborative Packing Lists
-
-Create shared packing lists for each trip.
-
-Assign specific items to group members.
-
-Track packing progress collaboratively.
-
-Rich-Media Group Chat
-
-The built-in trip chat supports:
-
-Text messages
-
-Image uploads with previews
-
-Document attachments such as PDFs
-
-In-browser voice notes
-
-.webm audio recording and uploads using the browser's native Web Audio APIs
-
-PDF Trip Reports
-
-Generate professional multi-page trip reports containing selected trip information such as:
-
-Itinerary
-
-Financial summary
-
-Packing list
-
-PDF reports are generated using DomPDF for offline use and sharing.
-
-User Profiles
-
-Custom user avatars
-
-Travel-style information
-
-Dynamic interface updates powered by Alpine.js
-
-🛠️ Tech Stack
+🧱 Tech Stack
 
 Layer
 
@@ -83,7 +73,7 @@ Technology
 
 Backend
 
-Laravel 11 (PHP)
+Laravel 11 / PHP
 
 Frontend
 
@@ -101,7 +91,36 @@ PDF Generation
 
 barryvdh/laravel-dompdf
 
-⚙️ Local Installation
+Architecture
+
+Laravel + Livewire TALL Stack
+
+🔄 Application Flow
+
+        ┌──────────────────────┐
+        │      TripPlanner     │
+        └──────────┬───────────┘
+                   │
+       ┌───────────┼───────────┐
+       ▼           ▼           ▼
+  ┌─────────┐ ┌─────────┐ ┌─────────┐
+  │Itinerary│ │ Finances│ │ Packing │
+  └────┬────┘ └────┬────┘ └────┬────┘
+       │           │           │
+       └───────────┼───────────┘
+                   ▼
+            ┌──────────────┐
+            │ Group Chat   │
+            │ Text / Media │
+            │ Voice Notes  │
+            └──────┬───────┘
+                   │
+                   ▼
+            ┌──────────────┐
+            │ PDF Report   │
+            └──────────────┘
+
+⚙️ Installation
 
 1. Clone the repository
 
@@ -110,103 +129,75 @@ cd tripplanner
 
 2. Install dependencies
 
-Install PHP dependencies:
-
 composer install
-
-Install frontend dependencies:
-
 npm install
 
 3. Configure the environment
 
-Copy the example environment file:
+Create your environment file and generate an application key:
 
 cp .env.example .env
-
-Generate the Laravel application key:
-
 php artisan key:generate
 
-4. Configure the database
+Configure the required database credentials in .env.
 
-Create a MySQL database and update the database credentials in your .env file.
-
-Then run the migrations:
+4. Run database migrations
 
 php artisan migrate
 
-5. Link public storage
+5. Link storage
 
-This is required for uploaded avatars and chat media to be publicly accessible:
+Required for uploaded avatars and chat media:
 
 php artisan storage:link
 
-6. Configure real-time broadcasting
+6. Configure broadcasting
 
-Configure your broadcasting credentials in .env according to the real-time provider used by the project.
+Configure your broadcasting connection and WebSocket credentials in .env.
 
-For Laravel Reverb, for example:
+For Laravel Reverb, the connection can be configured as:
 
 BROADCAST_CONNECTION=reverb
 
-Make sure the related Reverb variables are also configured correctly in your environment.
-
 7. Start the application
 
-Run the frontend development server:
+Run the frontend development server and Laravel server:
 
+# Terminal 1
 npm run dev
 
-In another terminal, start Laravel:
-
+# Terminal 2
 php artisan serve
 
-If Laravel Reverb is enabled, start the WebSocket server in a third terminal:
+For Laravel Reverb, also start the WebSocket server:
 
 php artisan reverb:start
 
-📸 Screenshots
+📁 Main Functional Areas
 
-Add screenshots to public/screenshots/ and update the paths below.
+TripPlanner
+│
+├── Itinerary
+│   └── Activities & trip planning
+│
+├── Finances
+│   └── Shared and personal expenses
+│
+├── Packing List
+│   └── Collaborative item tracking
+│
+├── Group Chat
+│   ├── Text messages
+│   ├── Images
+│   ├── Documents
+│   └── Voice notes
+│
+├── User Profiles
+│   └── Avatars & travel preferences
+│
+└── PDF Reports
+    └── Offline trip summaries
 
-Dashboard & Itinerary
-
-Expense Management
-
-
-
-
-
-Rich Media Chat
-
-PDF Report
-
-
-
-
-
-📂 Suggested Screenshot Structure
-
-public/
-└── screenshots/
-    ├── dashboard.png
-    ├── finances.png
-    ├── chat.png
-    └── pdf-report.png
-
-🤝 Contributing
-
-Contributions, issues, and feature requests are welcome.
-
-Feel free to open an issue or submit a pull request with improvements.
-
-📝 License
+📜 License
 
 This project is open-source and available under the MIT License.
-
-👨‍💻 About the Project
-
-TripPlanner was built as a practical full-stack application focused on real-time collaboration, group expense management, media uploads, browser-based voice recording, and document generation.
-
-The project demonstrates how Laravel, Livewire, Alpine.js, Tailwind CSS, WebSockets, file storage, and PDF generation can be combined into a single collaborative application.
