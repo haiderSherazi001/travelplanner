@@ -17,10 +17,43 @@
                 📍 {{ $trip->destination }} &nbsp;|&nbsp; 📅 {{ \Carbon\Carbon::parse($trip->start_date)->format('M d, Y') }} - {{ \Carbon\Carbon::parse($trip->end_date)->format('M d, Y') }}
             </p>
         </div>
-        <div>
-             <a href="{{ route('trips.export', $trip->id) }}" target="_blank" class="bg-gray-900 text-white px-4 py-2 rounded-lg shadow-sm hover:bg-gray-800 transition font-medium flex items-center gap-2">
-                <span>📄</span> Export Report
-            </a>
+        <!-- Export Button with Dropdown -->
+        <div x-data="{ open: false }" class="relative">
+            <button @click="open = !open" class="flex items-center gap-2 bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg font-bold text-sm hover:bg-gray-50 shadow-sm transition">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                Export Report
+            </button>
+
+            <!-- Dropdown Menu -->
+            <div x-show="open" @click.outside="open = false" x-cloak 
+                 class="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-lg border border-gray-200 z-50 p-4"
+                 x-transition:enter="transition ease-out duration-100"
+                 x-transition:enter-start="transform opacity-0 scale-95"
+                 x-transition:enter-end="transform opacity-100 scale-100">
+                 
+                <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Include Sections</h4>
+                
+                <form action="{{ route('trips.export', $trip->id) }}" method="GET">
+                    <div class="space-y-2 mb-4">
+                        <label class="flex items-center gap-3 cursor-pointer">
+                            <input type="checkbox" name="sections[]" value="itinerary" checked class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                            <span class="text-sm font-medium text-gray-700">Official Itinerary</span>
+                        </label>
+                        <label class="flex items-center gap-3 cursor-pointer">
+                            <input type="checkbox" name="sections[]" value="finances" checked class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                            <span class="text-sm font-medium text-gray-700">Financial Summary</span>
+                        </label>
+                        <label class="flex items-center gap-3 cursor-pointer">
+                            <input type="checkbox" name="sections[]" value="packing" checked class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                            <span class="text-sm font-medium text-gray-700">Group Packing List</span>
+                        </label>
+                    </div>
+                    
+                    <button type="submit" @click="open = false" class="w-full bg-indigo-600 text-white py-2 rounded-lg text-sm font-bold hover:bg-indigo-700 transition">
+                        Download PDF
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
 
