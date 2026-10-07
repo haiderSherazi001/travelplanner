@@ -22,6 +22,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'avatar',
+        'phone',
+        'bio',
+        'travel_style',
     ];
 
     /**
@@ -55,5 +59,14 @@ class User extends Authenticatable
     public function packedItems()
     {
         return $this->belongsToMany(PackingListItem::class, 'packing_list_item_user')->withTimestamps();
+    }
+
+    public function getAvatarUrlAttribute()
+    {
+        if ($this->avatar) {
+            return asset('storage/' . $this->avatar);
+        }
+        
+        return 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&color=4f46e5&background=eef2ff';
     }
 }

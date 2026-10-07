@@ -1,4 +1,4 @@
-<div class="max-w-[1400px] mx-auto py-6 sm:px-6 lg:px-8 flex flex-col h-[calc(100vh-65px)]">
+<div class="max-w-[1400px] mx-auto py-6 sm:px-6 lg:px-8 flex flex-col h-[calc(100vh-65px)] min-h-0">
     
     <!-- Unified Trip Header (Sticky at top) -->
     <div class="mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 shrink-0 px-4 sm:px-0">
@@ -58,10 +58,10 @@
     </div>
 
     <!-- Workspace Grid -->
-    <div class="flex-1 flex flex-col lg:flex-row gap-6 overflow-hidden px-4 sm:px-0">
+    <div class="flex-1 min-h-0 flex flex-col lg:flex-row gap-6 overflow-hidden px-4 sm:px-0">
         
         <!-- LEFT CANVAS: Core Action Tabs (70% width) -->
-        <div class="w-full lg:w-2/3 flex flex-col bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="w-full lg:w-2/3 min-h-0 flex flex-col bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
             <!-- Tabs -->
             <div class="bg-gray-50 border-b border-gray-200 flex overflow-x-auto hide-scrollbar px-4 shrink-0">
                 @php
@@ -88,7 +88,7 @@
             </div>
 
             <!-- Active Tab Content -->
-            <div class="flex-1 overflow-y-auto p-6 bg-white">
+            <div class="flex-1 min-h-0 overflow-y-auto p-6 bg-white">
                 @if($activeTab === 'itinerary')
                     <livewire:trip-itinerary :trip="$trip" key="tab-itinerary" />
                 @elseif($activeTab === 'finances')
@@ -99,18 +99,54 @@
             </div>
         </div>
 
-        <!-- RIGHT SIDEBAR: Social & Chat (30% width) -->
-        <div class="w-full lg:w-1/3 lg:flex flex-col gap-4 hidden h-full">
-            
-            <!-- Members Widget -->
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 shrink-0">
-                <livewire:trip-members :trip="$trip" />
+        <!-- RIGHT CANVAS: Collaboration Sidebar (30%) -->
+        <div class="w-full lg:w-[30%] bg-white rounded-2xl shadow-sm border border-gray-200 flex flex-col h-full overflow-hidden">            
+            <!-- Collapsible Group Members Section -->
+            <div x-data="{ showMembers: false }" class="border-b border-gray-200 shrink-0">
+                <!-- Toggle Button -->
+                <button @click="showMembers = !showMembers" class="w-full flex justify-between items-center px-4 py-3 bg-gray-50 hover:bg-gray-100 transition focus:outline-none">
+                    <h3 class="font-bold text-gray-800 text-sm flex items-center gap-2">
+                        <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                        Trip Members ({{ $trip->users->count() }})
+                    </h3>
+                    
+                    <!-- Chevron Arrow -->
+                    <svg :class="showMembers ? 'rotate-180' : ''" class="w-4 h-4 text-gray-500 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                
+                <!-- Expanded Members List -->
+                <div x-show="showMembers" 
+                     x-collapse 
+                     x-cloak 
+                     class="bg-white border-t border-gray-100 max-h-48 overflow-y-auto shrink-0">
+                    <ul class="flex flex-col py-2">
+                        @foreach($trip->users as $member)
+                            <li class="flex items-center gap-3 px-4 py-2 hover:bg-gray-50 transition">
+                                <img class="h-8 w-8 rounded-full ring-2 ring-white shadow-sm object-cover" 
+                                    src="{{ $member->avatar_url }}" 
+                                    alt="{{ $member->name }}" />
+                                <div class="flex flex-col">
+                                    <span class="text-sm font-bold text-gray-900 leading-tight">
+                                        {{ $member->name }}
+                                    </span>
+                                    @if($member->id === $trip->user_id)
+                                        <span class="text-[10px] uppercase tracking-wide text-indigo-500 font-bold">Trip Admin</span>
+                                    @elseif($member->id === auth()->id())
+                                        <span class="text-[10px] uppercase tracking-wide text-gray-500 font-bold">You</span>
+                                    @endif
+                                </div>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
             </div>
 
-            <!-- Chat Widget -->
-            <div class="flex-1 bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden flex flex-col h-full">
-                <!-- We pass a smaller profile to chat so it styles itself for a sidebar -->
-                <livewire:trip-chat :trip="$trip" />
+            <!-- Chat Component Area -->
+            <!-- Keep the chat region constrained so the message list can scroll and the input stays visible. -->
+            <div class="flex-1 min-h-0 overflow-hidden flex flex-col bg-white">
+                <div class="flex-1 min-h-0 overflow-hidden flex flex-col">
+                    <livewire:trip-chat :trip="$trip" />
+                </div>
             </div>
         </div>
     </div>

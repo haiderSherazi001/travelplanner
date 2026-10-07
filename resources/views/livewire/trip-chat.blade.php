@@ -5,14 +5,30 @@
     </div>
 
     <!-- Messages Area -->
-    <div class="flex-1 p-3 overflow-y-auto flex flex-col gap-3" 
-         x-data
-         x-init="
-             Echo.private('trip.{{ $trip->id }}')
-                 .listen('MessageSent', (e) => {
-                     $wire.$refresh();
-                 });
-         ">
+    <div class="flex-1 p-3 overflow-y-auto flex flex-col gap-3 scroll-smooth" 
+         id="chat-container"
+         x-data="{
+             init() {
+                 // 1. Scroll to bottom on initial page load
+                 this.scrollToBottom();
+                 
+                 // 2. Listen for WebSocket messages and trigger Livewire refresh
+                 Echo.private('trip.{{ $trip->id }}')
+                     .listen('MessageSent', (e) => {
+                         $wire.$refresh();
+                     });
+                     
+                 // 3. Automatically watch the DOM. If Livewire adds a new message, scroll down!
+                 let observer = new MutationObserver(() => this.scrollToBottom());
+                 observer.observe(this.$el, { childList: true });
+             },
+             scrollToBottom() {
+                 // A tiny timeout ensures the browser renders the new element before calculating the height
+                 setTimeout(() => {
+                     this.$el.scrollTop = this.$el.scrollHeight;
+                 }, 50);
+             }
+         }">
         @forelse ($messages as $message)
             @php $isMine = $message->user_id === auth()->id(); @endphp
             
