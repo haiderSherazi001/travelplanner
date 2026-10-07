@@ -15,13 +15,25 @@ class TripExpenses extends Component
 
     public function mount(Trip $trip)
     {
-        // Security check
         if (!Auth::user()->trips->contains($trip->id)) {
             abort(403, 'Unauthorized access to this trip.');
         }
         
         $this->trip = $trip;
         $this->date = now()->format('Y-m-d'); // Default to today
+    }
+
+    public function getListeners()
+    {
+        return [
+            "echo-private:trip.{$this->trip->id},TripTabUpdated" => 'handleTabUpdate',
+        ];
+    }
+
+    public function handleTabUpdate($event)
+    {
+        if (isset($event['tabName']) && $event['tabName'] === 'finances') {
+        }
     }
 
     public function addExpense()
@@ -38,6 +50,8 @@ class TripExpenses extends Component
             'amount' => $this->amount,
             'date' => $this->date,
         ]);
+
+        broadcast(new \App\Events\TripTabUpdated($this->trip->id, 'finances'))->toOthers();
         
         // Load the trip and payer relationships so the notification has access to them
         $expense->load(['trip', 'payer']);

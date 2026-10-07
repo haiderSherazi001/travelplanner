@@ -4,7 +4,6 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\Trip;
-use App\Models\PackingListItem;
 use Illuminate\Support\Facades\Auth;
 
 class TripPackingList extends Component
@@ -14,11 +13,24 @@ class TripPackingList extends Component
 
     public function mount(Trip $trip)
     {
-        // Security check
         if (!Auth::user()->trips->contains($trip->id)) {
             abort(403, 'Unauthorized access to this trip.');
         }
         $this->trip = $trip;
+    }
+
+    // Listen directly to the WebSocket channel for this specific trip
+    public function getListeners()
+    {
+        return [
+            "echo-private:trip.{$this->trip->id},TripTabUpdated" => 'handleTabUpdate',
+        ];
+    }
+
+    public function handleTabUpdate($event)
+    {
+        if (isset($event['tabName']) && $event['tabName'] === 'packing') {
+        }
     }
 
     public function addItem()
@@ -29,19 +41,20 @@ class TripPackingList extends Component
 
         $this->trip->packingListItems()->create([
             'item' => $this->newItem,
-            'is_packed' => false,
         ]);
 
-        $this->newItem = ''; // Clear the input field
+        broadcast(new \App\Events\TripTabUpdated($this->trip->id, 'packing'))->toOthers();
+        $this->newItem = '';
     }
 
     public function togglePacked($itemId)
     {
         $item = $this->trip->packingListItems()->find($itemId);
         if ($item) {
-            $item->update([
-                'is_packed' => !$item->is_packed
-            ]);
+            // This magically adds the user if they aren't there, or removes them if they are
+            $item->packedBy()->toggle(Auth::id());
+            
+            broadcast(new \App\Events\TripTabUpdated($this->trip->id, 'packing'))->toOthers();
         }
     }
 
@@ -50,23 +63,28 @@ class TripPackingList extends Component
         $item = $this->trip->packingListItems()->find($itemId);
         if ($item) {
             $item->delete();
+            broadcast(new \App\Events\TripTabUpdated($this->trip->id, 'packing'))->toOthers();
         }
     }
 
     public function render()
     {
-        $items = $this->trip->packingListItems()->latest()->get();
+        // Load items along with the users who packed them
+        $items = $this->trip->packingListItems()->with('packedBy')->latest()->get();
         
-        // Calculate progress
         $totalItems = $items->count();
-        $packedItems = $items->where('is_packed', true)->count();
-        $progress = $totalItems > 0 ? round(($packedItems / $totalItems) * 100) : 0;
+        
+        // Calculate MY personal progress
+        $myPackedCount = $items->filter(function($item) {
+            return $item->packedBy->contains(Auth::id());
+        })->count();
+        
+        $progress = $totalItems > 0 ? round(($myPackedCount / $totalItems) * 100) : 0;
 
         return view('livewire.trip-packing-list', [
             'items' => $items,
             'progress' => $progress,
-            'totalItems' => $totalItems,
-            'packedItems' => $packedItems
+            'tripMembers' => $this->trip->users
         ]);
     }
 }

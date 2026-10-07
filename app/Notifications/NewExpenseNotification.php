@@ -29,6 +29,7 @@ class NewExpenseNotification extends Notification
             'trip_title' => $this->expense->trip->title,
             'amount' => $this->expense->amount,
             'message' => "{$this->expense->payer->name} logged a new expense of \${$this->expense->amount} for '{$this->expense->description}'.",
+            'target_tab' => 'finances',
         ];
     }
 }

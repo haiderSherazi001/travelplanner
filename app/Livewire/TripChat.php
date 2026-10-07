@@ -26,10 +26,13 @@ class TripChat extends Component
             'content' => 'required|string|max:1000',
         ]);
 
-        $this->trip->messages()->create([
-            'user_id' => Auth::id(),
+        $message = $this->trip->messages()->create([
+            'user_id' => \Illuminate\Support\Facades\Auth::id(),
             'content' => $this->content,
         ]);
+
+        // Broadcast the event to others
+        broadcast(new \App\Events\MessageSent($message))->toOthers();
 
         $this->reset('content');
     }

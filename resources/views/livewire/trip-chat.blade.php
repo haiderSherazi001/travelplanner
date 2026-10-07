@@ -7,7 +7,7 @@
     </div>
 
     <!-- Messages Area -->
-    <div wire:poll.2s class="flex-1 p-3 overflow-y-auto flex flex-col gap-2.5">
+    <div class="flex-1 p-3 overflow-y-auto flex flex-col gap-2.5"  x-data x-init=" Echo.private('trip.{{ $trip->id }}') .listen('MessageSent', (e) => { $wire.$refresh(); }); ">
         @forelse ($messages as $message)
             @php $isMe = $message->user_id === auth()->id(); @endphp
             <div class="flex flex-col {{ $isMe ? 'items-end' : 'items-start' }}">

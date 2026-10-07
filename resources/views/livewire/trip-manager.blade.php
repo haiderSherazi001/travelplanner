@@ -39,9 +39,17 @@
                     ];
                 @endphp
                 @foreach($tabs as $key => $label)
-                    <button wire:click="$set('activeTab', '{{ $key }}')" 
-                            class="whitespace-nowrap px-6 py-4 font-bold text-sm transition-colors border-b-2 {{ $activeTab === $key ? 'border-indigo-600 text-indigo-700 bg-white' : 'border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-100' }}">
+                    <button wire:click="switchTab('{{ $key }}')" 
+                            class="relative whitespace-nowrap px-6 py-4 font-bold text-sm transition-colors border-b-2 {{ $activeTab === $key ? 'border-indigo-600 text-indigo-700 bg-white' : 'border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-100' }}">
                         {{ $label }}
+                        
+                        <!-- Notification Dot -->
+                        @if(in_array($key, $unreadTabs))
+                            <span class="absolute top-3 right-3 flex h-2.5 w-2.5">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
+                            </span>
+                        @endif
                     </button>
                 @endforeach
             </div>

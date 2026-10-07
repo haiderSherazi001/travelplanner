@@ -51,4 +51,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Trip::class)->withPivot('role')->withTimestamps();
     }
+
+    public function packedItems()
+    {
+        return $this->belongsToMany(PackingListItem::class, 'packing_list_item_user')->withTimestamps();
+    }
 }

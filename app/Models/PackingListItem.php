@@ -9,7 +9,7 @@ class PackingListItem extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['trip_id', 'item', 'is_packed'];
+    protected $fillable = ['trip_id', 'item'];
 
     protected $casts = [
         'is_packed' => 'boolean',
@@ -18,5 +18,10 @@ class PackingListItem extends Model
     public function trip()
     {
         return $this->belongsTo(Trip::class);
+    }
+
+    public function packedBy()
+    {
+        return $this->belongsToMany(User::class, 'packing_list_item_user')->withTimestamps();
     }
 }

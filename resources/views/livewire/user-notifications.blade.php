@@ -22,9 +22,10 @@
                     </div>
                     
                     <div class="flex items-center gap-3">
-                        <a href="{{ route('trips.expenses', $notification->data['trip_id']) }}" class="text-sm font-medium text-indigo-600 hover:underline">
+                        <button wire:click="readAndRedirect('{{ $notification->id }}', '{{ $notification->data['trip_id'] }}', '{{ $notification->data['target_tab'] ?? 'finances' }}')" 
+                                class="text-sm font-medium text-indigo-600 hover:underline focus:outline-none">
                             View
-                        </a>
+                        </button>
                         @if(is_null($notification->read_at))
                             <button wire:click="markAsRead('{{ $notification->id }}')" class="w-2.5 h-2.5 bg-indigo-600 rounded-full hover:bg-indigo-800 transition" title="Mark as read"></button>
                         @endif
