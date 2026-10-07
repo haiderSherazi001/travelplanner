@@ -9,8 +9,8 @@ class Expense extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['trip_id', 'user_id', 'description', 'amount', 'date'];
-
+    protected $fillable = ['user_id', 'trip_id', 'description', 'amount', 'date', 'is_personal'];
+    
     public function trip()
     {
         return $this->belongsTo(Trip::class);

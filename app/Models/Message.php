@@ -9,7 +9,14 @@ class Message extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['trip_id', 'user_id', 'content'];
+    protected $fillable = [
+        'user_id', 
+        'trip_id', 
+        'content', 
+        'file_path', 
+        'file_name', 
+        'file_type'
+    ];
 
     public function trip()
     {
