@@ -1,59 +1,212 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+TripPlanner ✈️
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
 
-## About Laravel
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-## Learning Laravel
+A real-time, collaborative trip-planning web application built with the TALL stack. TripPlanner helps groups organize itineraries, manage shared and personal expenses, coordinate packing, and communicate through a rich-media chat experience.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+Project Status: Active development
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+📸 Dashboard Preview
 
-## Laravel Sponsors
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
 
-### Premium Partners
+Replace the image path above with your actual screenshot path, or remove this section until you have a screenshot ready.
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+🚀 Core Features
 
-## Contributing
+Real-Time Itineraries
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Create and manage trip activities.
 
-## Code of Conduct
+Add, edit, and reorganize itinerary items.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Keep group members synchronized through real-time updates without requiring manual page refreshes.
 
-## Security Vulnerabilities
+Advanced Expense Management
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Record group expenses and split them evenly.
 
-## License
+Track personal expenses separately.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Automatically calculate who paid what and provide a consolidated financial summary.
+
+Collaborative Packing Lists
+
+Create shared packing lists for each trip.
+
+Assign specific items to group members.
+
+Track packing progress collaboratively.
+
+Rich-Media Group Chat
+
+The built-in trip chat supports:
+
+Text messages
+
+Image uploads with previews
+
+Document attachments such as PDFs
+
+In-browser voice notes
+
+.webm audio recording and uploads using the browser's native Web Audio APIs
+
+PDF Trip Reports
+
+Generate professional multi-page trip reports containing selected trip information such as:
+
+Itinerary
+
+Financial summary
+
+Packing list
+
+PDF reports are generated using DomPDF for offline use and sharing.
+
+User Profiles
+
+Custom user avatars
+
+Travel-style information
+
+Dynamic interface updates powered by Alpine.js
+
+🛠️ Tech Stack
+
+Layer
+
+Technology
+
+Backend
+
+Laravel 11 (PHP)
+
+Frontend
+
+Livewire 3, Alpine.js, Tailwind CSS
+
+Database
+
+MySQL
+
+Real-Time
+
+Laravel Reverb / Pusher WebSockets
+
+PDF Generation
+
+barryvdh/laravel-dompdf
+
+⚙️ Local Installation
+
+1. Clone the repository
+
+git clone https://github.com/yourusername/tripplanner.git
+cd tripplanner
+
+2. Install dependencies
+
+Install PHP dependencies:
+
+composer install
+
+Install frontend dependencies:
+
+npm install
+
+3. Configure the environment
+
+Copy the example environment file:
+
+cp .env.example .env
+
+Generate the Laravel application key:
+
+php artisan key:generate
+
+4. Configure the database
+
+Create a MySQL database and update the database credentials in your .env file.
+
+Then run the migrations:
+
+php artisan migrate
+
+5. Link public storage
+
+This is required for uploaded avatars and chat media to be publicly accessible:
+
+php artisan storage:link
+
+6. Configure real-time broadcasting
+
+Configure your broadcasting credentials in .env according to the real-time provider used by the project.
+
+For Laravel Reverb, for example:
+
+BROADCAST_CONNECTION=reverb
+
+Make sure the related Reverb variables are also configured correctly in your environment.
+
+7. Start the application
+
+Run the frontend development server:
+
+npm run dev
+
+In another terminal, start Laravel:
+
+php artisan serve
+
+If Laravel Reverb is enabled, start the WebSocket server in a third terminal:
+
+php artisan reverb:start
+
+📸 Screenshots
+
+Add screenshots to public/screenshots/ and update the paths below.
+
+Dashboard & Itinerary
+
+Expense Management
+
+
+
+
+
+Rich Media Chat
+
+PDF Report
+
+
+
+
+
+📂 Suggested Screenshot Structure
+
+public/
+└── screenshots/
+    ├── dashboard.png
+    ├── finances.png
+    ├── chat.png
+    └── pdf-report.png
+
+🤝 Contributing
+
+Contributions, issues, and feature requests are welcome.
+
+Feel free to open an issue or submit a pull request with improvements.
+
+📝 License
+
+This project is open-source and available under the MIT License.
+
+👨‍💻 About the Project
+
+TripPlanner was built as a practical full-stack application focused on real-time collaboration, group expense management, media uploads, browser-based voice recording, and document generation.
+
+The project demonstrates how Laravel, Livewire, Alpine.js, Tailwind CSS, WebSockets, file storage, and PDF generation can be combined into a single collaborative application.

@@ -12,12 +12,28 @@ class UserNotifications extends Component
         $notification = Auth::user()->notifications()->find($notificationId);
         if ($notification) {
             $notification->markAsRead();
+            $this->dispatch('notifications-read'); // Tells the badge to update
         }
     }
 
     public function markAllAsRead()
     {
         Auth::user()->unreadNotifications->markAsRead();
+        $this->dispatch('notifications-read');
+    }
+
+    public function readAndRedirect($notificationId, $tripId, $tab)
+    {
+        $notification = Auth::user()->notifications()->find($notificationId);
+        if ($notification && is_null($notification->read_at)) {
+            $notification->markAsRead();
+            $this->dispatch('notifications-read');
+        }
+
+        return $this->redirectRoute('trips.show', [
+            'trip' => $tripId, 
+            'activeTab' => $tab
+        ], navigate: true);
     }
 
     public function render()
