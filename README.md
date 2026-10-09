@@ -73,7 +73,7 @@ Technology
 
 Backend
 
-Laravel 11 / PHP
+Laravel 12 / PHP
 
 Frontend
 
