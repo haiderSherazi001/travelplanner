@@ -61,9 +61,9 @@
     <div class="flex-1 min-h-0 flex flex-col lg:flex-row gap-6 overflow-hidden px-4 sm:px-0">
         
         <!-- LEFT CANVAS: Core Action Tabs (70% width) -->
-        <div class="w-full lg:w-2/3 min-h-0 flex flex-col bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-            <!-- Tabs -->
-            <div class="bg-gray-50 border-b border-gray-200 flex overflow-x-auto hide-scrollbar px-4 shrink-0">
+        <div class="w-full lg:w-2/3 flex flex-col bg-white rounded-2xl shadow-sm ring-1 ring-slate-900/5 overflow-hidden">
+                <!-- Tabs -->
+            <div class="bg-slate-50/50 border-b border-slate-100 flex overflow-x-auto hide-scrollbar px-4 shrink-0">
                 @php
                     $tabs = [
                         'itinerary' => '🗓️ Itinerary',
@@ -100,9 +100,9 @@
         </div>
 
         <!-- RIGHT CANVAS: Collaboration Sidebar (30%) -->
-        <div class="w-full lg:w-[30%] bg-white rounded-2xl shadow-sm border border-gray-200 flex flex-col h-full overflow-hidden">            
+        <div class="w-full lg:w-[30%] bg-white rounded-2xl shadow-sm ring-1 ring-slate-900/5 flex flex-col h-full overflow-hidden">            
             <!-- Collapsible Group Members Section -->
-            <div x-data="{ showMembers: false }" class="border-b border-gray-200 shrink-0">
+            <div x-data="{ showMembers: false }" class="border-b border-slate-100 shrink-0">
                 <!-- Toggle Button -->
                 <button @click="showMembers = !showMembers" class="w-full flex justify-between items-center px-4 py-3 bg-gray-50 hover:bg-gray-100 transition focus:outline-none">
                     <h3 class="font-bold text-gray-800 text-sm flex items-center gap-2">
